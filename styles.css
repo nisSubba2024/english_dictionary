@@ -104,10 +104,12 @@ label {
 @media (max-width: 600px) {
 
     html {
-        font-size: 48%;
+        font-size: 44%;
     }
 
     .word-grid {
         justify-content: center;
-    }
+    };
+
 }
+
