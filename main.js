@@ -16,10 +16,12 @@ function getDefinitions(wordMeanings) {
         try {
             const partOfSpeech = wordMeanings[key].partOfSpeech;
             const definition = wordMeanings[key].definitions[0].definition;
+            const example = wordMeanings[key].definitions[0].example;
             wordDefinitions.push(
                 {
                     partOfSpeech: partOfSpeech,
                     definition: definition,
+                    example: example,
                 },
             )
         } catch (e) {
@@ -34,6 +36,7 @@ let wordDetails = [];
 
 const fetchData = async (url) => {
     const data = await apiRequest(url);
+    // console.log(JSON.stringify(data, null, 2));
     if (data) {
         for (const index in data) {
             const wordDefinition = getDefinitions(data[index].meanings);
@@ -55,9 +58,11 @@ inputField.addEventListener('change', async () => {
         checkWordGrid.remove();
     }
 
+
     let word = inputField.value;
     const apiUrl = `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`;
     await fetchData(apiUrl);
+    // console.log(JSON.stringify(wordDetails, null, 2));
 
     const wordGrid = document.createElement('section');
     wordGrid.classList.add('word-grid');
@@ -96,9 +101,18 @@ inputField.addEventListener('change', async () => {
 
                 definitionCard.appendChild(partOfSpeech);
                 definitionCard.appendChild(wordMeaning);
+
+                if (definition.example) {
+                    const exampleField = document.createElement('p');
+                    exampleField.classList.add('example');
+                    exampleField.textContent = `Example: ${definition.example}`;
+                    definitionCard.appendChild(exampleField);
+                }
+
                 wordCard.appendChild(definitionCard);
             }
         }
+
 
         if (wordList.audio) {
             const audioField = document.createElement('audio');
